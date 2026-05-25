@@ -1,4 +1,4 @@
-package com.usjt.loginandsignup;
+package view.loginandsignup;
 
 public class LoginAndSignup {
 

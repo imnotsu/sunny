@@ -1,5 +1,5 @@
 
-package com.usjt.loginandsignup;
+package view.loginandsignup;
 
 public class Login extends javax.swing.JFrame {
     
