@@ -1,4 +1,4 @@
-# 🍖 F.E.E.D — Food Emergency & Equitable Distribution
+# 🍖 Sunny
 
 <div align="center">
 
@@ -7,7 +7,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge&logo=mysql)
 ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow?style=for-the-badge)
 
-**Sistema desktop de gestão de doações e distribuição de alimentos para ONGs**
+**Sistema desktop de gestão de doações e distribuição de mantimentos para ONGs**
 
 *Projeto A3 — USJT | Alinhado à ODS 2 da ONU: Fome Zero e Agricultura Sustentável*
 
@@ -17,7 +17,7 @@
 
 ## 📖 Sobre o Projeto
 
-O **F.E.E.D** (*Food Emergency & Equitable Distribution*) é um sistema desktop desenvolvido em **Java** com interface graáfica desenvolvida utilizando **Java Swing** com manipulação de banco de dados **MySQL**, focado para ajudar no gerenciamento de doações e distribuição de alimentos todos aqueles que precisam, um projeto nascido para as ONGs não terem de se preocupar com o sistema de distribuição, e poderem focar integralmente nas doações.
+O **Project Sunny** é um sistema desktop desenvolvido em **Java** com interface graáfica desenvolvida utilizando **Java Swing** com manipulação de banco de dados **MySQL**, focado para ajudar no gerenciamento de doações e distribuição de alimentos todos aqueles que precisam, um projeto nascido para as ONGs não terem de se preocupar com o sistema de distribuição, e poderem focar integralmente nas doações.
 
 Por mais que a ideia do projeto nasceu como um trabalho academico, focamos nosso maximo para desenvolver algo que possa sim ser utilizado, sendo totalmente funcional, e compativel com o mundo real, sabemos que existem outras formas de ajudar a causa, portanto se está lendo isso, considere doar para algumas das ONGs que estarão listadas ao final deste **README**.
 
