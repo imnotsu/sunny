@@ -1,4 +1,4 @@
-package utils;
+package util;
 
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class PixGenerator {
 
-    public static String gerarPix(BigDecimal valor, String email) throws Exception {
+    public static Map<String, String> gerarPix(BigDecimal valor, String email) throws Exception {
 
         MercadoPagoConfig.setAccessToken("APP_USR-1029819585391993-090115-bfee3d69d772551e75f4f23954e2ef10-1185798625");
 
@@ -35,8 +35,15 @@ public class PixGenerator {
         PaymentClient client = new PaymentClient();
         Payment payment = client.create(paymentCreateRequest, requestOptions);
 
-        return payment.getPointOfInteraction()
-                .getTransactionData()
-                .getQrCode();
+        String copiaCola = payment.getPointOfInteraction()
+                .getTransactionData().getQrCode();
+
+        String base64 = payment.getPointOfInteraction()
+                .getTransactionData().getQrCodeBase64();
+
+        return Map.of(
+                "copia_cola", copiaCola,
+                "imagem_base64", base64
+        );
     }
 }
