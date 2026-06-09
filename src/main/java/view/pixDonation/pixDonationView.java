@@ -1,6 +1,7 @@
 
 package view.pixDonation;
 
+import dao.DoacaoPixDAO;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -25,6 +26,10 @@ public class pixDonationView extends javax.swing.JFrame {
     /**
      * Creates new form pixDonationView
      */
+
+    
+
+    
     public pixDonationView() {
         setUndecorated(true);
         Usuario u = SessaoUsuario.getUsuarioLogado();
@@ -35,6 +40,37 @@ public class pixDonationView extends javax.swing.JFrame {
         jTextField3.setText(u.getNome());
         jTextField1.setText(u.getEmail());
     }
+    
+        private javax.swing.Timer countdownTimer;
+    private int remainingSeconds;
+    private String currentPaymentId;
+    
+    private void iniciarContador() {
+    remainingSeconds = 300;
+    jButton2.setEnabled(false);
+    jLabel24.setText("05:00");
+
+    if (countdownTimer != null && countdownTimer.isRunning()) {
+        countdownTimer.stop();
+    }
+
+    countdownTimer = new javax.swing.Timer(1000, e -> {
+        remainingSeconds--;
+
+        int minutos = remainingSeconds / 60;
+        int segundos = remainingSeconds % 60;
+
+        jLabel24.setText(String.format("%02d:%02d", minutos, segundos));
+
+        if (remainingSeconds <= 0) {
+            countdownTimer.stop();
+            jLabel24.setText("Tempo expirado");
+            jButton2.setEnabled(true);
+        }
+    });
+
+    countdownTimer.start();
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,6 +92,7 @@ public class pixDonationView extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -76,6 +113,9 @@ public class pixDonationView extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,6 +176,19 @@ public class pixDonationView extends javax.swing.JFrame {
         jLabel14.setText("Relatorios");
         jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        jPanel4.setBackground(new java.awt.Color(255, 204, 51));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -156,8 +209,10 @@ public class pixDonationView extends javax.swing.JFrame {
                                 .addComponent(jLabel16)
                                 .addComponent(jLabel17)
                                 .addComponent(jLabel19)
-                                .addComponent(jLabel21)))))
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jLabel21)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,6 +237,7 @@ public class pixDonationView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel14)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jPanel8.setBackground(new java.awt.Color(204, 204, 204));
@@ -194,15 +250,18 @@ public class pixDonationView extends javax.swing.JFrame {
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 6, Short.MAX_VALUE)
+            .addGap(0, 8, Short.MAX_VALUE)
         );
 
         jLabel1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jLabel1.setText("Dados de Pagamento");
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBackground(new java.awt.Color(204, 51, 0));
+        jPanel2.setForeground(new java.awt.Color(204, 51, 0));
 
-        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel3.setBackground(new java.awt.Color(255, 204, 0));
+
+        jLabel11.setBackground(new java.awt.Color(255, 153, 0));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -242,13 +301,13 @@ public class pixDonationView extends javax.swing.JFrame {
         jTextField1.setText("Seuemail@aqui.com");
         jTextField1.addActionListener(this::jTextField1ActionPerformed);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel2.setText("Email");
 
         jLabel3.setFont(new java.awt.Font("Poppins", 1, 18)); // NOI18N
         jLabel3.setText("Painel Doação Pix");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel4.setText("Valor");
 
         jTextField2.setForeground(new java.awt.Color(102, 102, 102));
@@ -259,20 +318,23 @@ public class pixDonationView extends javax.swing.JFrame {
         jButton1.setText("Gerar Pix");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel5.setText("Nome");
 
         jTextField3.setForeground(new java.awt.Color(102, 102, 102));
         jTextField3.setText("Joao de joao de joao");
         jTextField3.addActionListener(this::jTextField3ActionPerformed);
 
+        jLabel6.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel6.setText("Toda e qualquer doação será 100% destinada para pessoas necessitadas");
 
+        jLabel7.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel7.setText("sendo distribuido ou o valor, ou transformar a doação em compras de");
 
+        jLabel8.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel8.setText("alimentos, ou outros, destinado a ONGs especializadas");
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel9.setText("Faça do mundo um lugar melhor");
 
         jLabel10.setForeground(new java.awt.Color(153, 153, 153));
@@ -286,61 +348,97 @@ public class pixDonationView extends javax.swing.JFrame {
         jLabel13.setForeground(new java.awt.Color(102, 102, 255));
         jLabel13.setText("Campo preenchido automaticamente");
 
+        jButton2.setText("Confirmar Pagamento");
+        jButton2.setEnabled(false);
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+        jButton2.addActionListener(this::jButton2ActionPerformed);
+
+        jLabel24.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(204, 51, 0));
+        jLabel24.setText("Esperando Gerar Pix");
+
+        jLabel25.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(204, 51, 0));
+        jLabel25.setText("Confirmando pagamento em");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextField1)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel13))
-                        .addComponent(jLabel3)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel4)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel10))
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel1)
                     .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel12))
-                        .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jTextField1)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel2)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel13))
+                                        .addComponent(jLabel4)
+                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel9)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addComponent(jLabel5)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel12))
+                                        .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel7))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(10, 10, 10)
+                                    .addComponent(jButton2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jLabel10)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel25)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel24)
+                        .addGap(101, 101, 101))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel24)
+                    .addComponent(jLabel25))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel8)
-                        .addGap(35, 35, 35)
+                        .addGap(29, 29, 29)
                         .addComponent(jLabel9)
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -358,13 +456,13 @@ public class pixDonationView extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
+                        .addGap(60, 60, 60)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)))
+                            .addComponent(jLabel10)
+                            .addComponent(jButton2)))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(29, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -383,24 +481,58 @@ public class pixDonationView extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        jButton1.setEnabled(false);
-        try {
-            BigDecimal valor = new BigDecimal(jTextField2.getText());
-            String Email = jTextField1.getText();
+    jButton1.setEnabled(false);
 
-            Map<String, String> pix = PixGenerator.gerarPix(valor, Email);
-            //CopiaEColaLabel.setText(pix.get("copia_cola"));
-            System.out.println("Copia e Cola: " + pix.get("copia_cola"));
+    try {
+        BigDecimal valor = new BigDecimal(jTextField2.getText().trim().replace(",", "."));
+        String email = jTextField1.getText().trim();
+        String nome = jTextField3.getText().trim();
 
-            byte[] decodedBytes = Base64.getDecoder().decode(pix.get("imagem_base64"));
-            Image img = new ImageIcon(decodedBytes).getImage();
-            Image qr = img.getScaledInstance(490, 490, Image.SCALE_SMOOTH);
-            jLabel11.setIcon(new ImageIcon(qr));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            jButton1.setEnabled(true);
+        Map<String, String> pix = PixGenerator.gerarPix(valor, email);
+        currentPaymentId = pix.get("payment_id");
+
+        byte[] decodedBytes = Base64.getDecoder().decode(pix.get("imagem_base64"));
+        Image img = new ImageIcon(decodedBytes).getImage();
+        Image qr = img.getScaledInstance(490, 490, Image.SCALE_SMOOTH);
+        jLabel11.setIcon(new ImageIcon(qr));
+
+        DoacaoPixDAO dao = new DoacaoPixDAO();
+
+        long idDoador = SessaoUsuario.getUsuarioLogado().getIdUsuario();
+        int idTipoDoacao = 1;
+        Integer idCampanha = null;
+        String observacao = null;
+
+        long idDoacao = dao.inserirDoacaoPendente(
+                (int) idDoador,
+                nome,
+                email,
+                idTipoDoacao,
+                idCampanha,
+                observacao
+        );
+
+        if (idDoacao > 0) {
+            dao.inserirDoacaoDinheiro(
+                    idDoacao,
+                    valor,
+                    currentPaymentId,
+                    pix.get("copia_cola"),
+                    pix.get("imagem_base64")
+            );
+
+            iniciarContador();
+            jLabel24.setText("05:00");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao registrar a doação pendente.");
         }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        javax.swing.JOptionPane.showMessageDialog(this, "Erro ao gerar Pix.");
+    } finally {
+        jButton1.setEnabled(true);
+}
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
@@ -413,6 +545,31 @@ public class pixDonationView extends javax.swing.JFrame {
             frame.setVisible(true);
             this.dispose();
     }//GEN-LAST:event_jLabel15MouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+
+        if (currentPaymentId == null || currentPaymentId.isBlank()) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Nenhum pagamento foi gerado.");
+        return;
+    }
+
+        try {
+            String status = PixGenerator.consultarStatusPagamento(currentPaymentId);
+
+            if ("approved".equalsIgnoreCase(status)) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Pagamento confirmado!");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Pagamento ainda não confirmado: " + status);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao verificar pagamento.");
+        }
+    }//GEN-LAST:event_jButton2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -441,6 +598,7 @@ public class pixDonationView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -457,6 +615,8 @@ public class pixDonationView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -467,6 +627,7 @@ public class pixDonationView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;

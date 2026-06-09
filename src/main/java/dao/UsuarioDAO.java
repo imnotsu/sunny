@@ -82,6 +82,8 @@ public class UsuarioDAO {
                     usuario.setTelefone(rs.getString("telefone"));
                     usuario.setIdPerfil(rs.getInt("id_perfil"));
                     usuario.setAtivo(rs.getInt("ativo"));
+                    usuario.setCriadoEm(rs.getTimestamp("criado_em"));
+                    usuario.setAtualizadoEm(rs.getTimestamp("atualizado_em"));
                     return usuario;
                 }
             }
@@ -110,6 +112,8 @@ public class UsuarioDAO {
                 usuario.setTelefone(rs.getString("telefone"));
                 usuario.setIdPerfil(rs.getInt("id_perfil"));
                 usuario.setAtivo(rs.getInt("ativo"));
+                usuario.setCriadoEm(rs.getTimestamp("criado_em"));
+                usuario.setAtualizadoEm(rs.getTimestamp("atualizado_em"));
                 lista.add(usuario);
             }
         } catch (SQLException e) {
@@ -139,6 +143,8 @@ public class UsuarioDAO {
                     usuario.setTelefone(rs.getString("telefone"));
                     usuario.setIdPerfil(rs.getInt("id_perfil"));
                     usuario.setAtivo(rs.getInt("ativo"));
+                    usuario.setCriadoEm(rs.getTimestamp("criado_em"));
+                    usuario.setAtualizadoEm(rs.getTimestamp("atualizado_em"));
                     return usuario;
                 }
             }

@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Timestamp;
+
 public class Usuario {
     private int idUsuario;
     private String usuario;
@@ -9,6 +11,8 @@ public class Usuario {
     private String telefone;
     private int idPerfil;
     private int ativo;
+    private Timestamp criadoEm;
+    private Timestamp atualizadoEm;
 
     public Usuario() {
     }
@@ -75,5 +79,21 @@ public class Usuario {
 
     public void setAtivo(int ativo) {
         this.ativo = ativo;
+    }
+
+    public Timestamp getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(Timestamp criadoEm) {
+        this.criadoEm = criadoEm;
+    }
+
+    public Timestamp getAtualizadoEm() {
+        return atualizadoEm;
+    }
+
+    public void setAtualizadoEm(Timestamp atualizadoEm) {
+        this.atualizadoEm = atualizadoEm;
     }
 }

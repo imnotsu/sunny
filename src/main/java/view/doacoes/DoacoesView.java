@@ -2,80 +2,75 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package view.dashboard;
-import dao.UsuarioDAO;
+package view.doacoes;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import model.Usuario;
-import javax.swing.table.DefaultTableModel;
-import java.util.List;
 import view.crud.edit.editView;
-import view.doacoes.DoacoesView;
-import view.login.LoginView;
 import view.pixDonation.pixDonationView;
+
 /**
  *
  * @author mathe
  */
-public class DashboardView extends javax.swing.JFrame {
+public class DoacoesView extends javax.swing.JFrame {
     
-private Usuario obterUsuarioSelecionado() {
-    int linha = jTable1.getSelectedRow();
-
-    if (linha == -1) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Selecione um usuário.");
-        return null;
-    }
-
-    Usuario u = new Usuario();
-    u.setIdUsuario(Integer.parseInt(jTable1.getValueAt(linha, 0).toString()));
-    u.setUsuario(jTable1.getValueAt(linha, 1).toString());
-    u.setNome(jTable1.getValueAt(linha, 2).toString());
-    u.setEmail(jTable1.getValueAt(linha, 3).toString());
-    u.setTelefone(jTable1.getValueAt(linha, 4).toString());
-
-    return u;
-}
-    
-    private void carregarUsuariosNaTabela() {
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0);
-
-    UsuarioDAO dao = new UsuarioDAO();
-    List<Usuario> usuarios = dao.listarTodos();
-
-    for (Usuario u : usuarios) {
-        model.addRow(new Object[]{
-            u.getIdUsuario(),
-            u.getUsuario(),
-            u.getNome(),
-            u.getEmail(),
-            u.getTelefone(),
-            u.getCriadoEm(),
-            u.getAtualizadoEm()
-        });
-    }
-}
-    private Usuario usuarioLogado;
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashboardView.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DoacoesView.class.getName());
 
     /**
-     * Creates new form DashboardView
+     * Creates new form doacoesView
      */
-public DashboardView() {
-    setUndecorated(true);
-    initComponents();
-    carregarUsuariosNaTabela();
-}
-
-public DashboardView(Usuario usuarioLogado) {
-    setUndecorated(true);
-    initComponents();
-    this.usuarioLogado = usuarioLogado;
-    carregarUsuariosNaTabela();
-    jLabel2.setText("Olá, " + usuarioLogado.getNome());
-}
+    public DoacoesView() {
+        setUndecorated(true);
+        initComponents();
+        carregarDoacoes();
+    }
     
+    private void carregarDoacoes() {
+        String sql = """
+            SELECT 
+                d.id_doacao,
+                d.nome_doador,
+                d.email_doador,
+                td.nome AS tipo_doacao,
+                sd.nome AS status_doacao,
+                dd.valor,
+                d.data_doacao
+            FROM doacao d
+            INNER JOIN tipo_doacao td ON d.id_tipo_doacao = td.id_tipo_doacao
+            INNER JOIN status_doacao sd ON d.id_status_doacao = sd.id_status_doacao
+            LEFT JOIN doacao_dinheiro dd ON d.id_doacao = dd.id_doacao
+            ORDER BY d.data_doacao DESC
+        """;
+
+        try (java.sql.Connection conn = util.DatabaseConnection.getConnection();
+             java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
+             java.sql.ResultSet rs = stmt.executeQuery()) {
+
+            javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel();
+            model.setColumnIdentifiers(new Object[]{
+                "ID", "Nome", "Email", "Tipo de Doação", "Status", "Valor", "Data"
+            });
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getLong("id_doacao"),
+                    rs.getString("nome_doador"),
+                    rs.getString("email_doador"),
+                    rs.getString("tipo_doacao"),
+                    rs.getString("status_doacao"),
+                    rs.getBigDecimal("valor"),
+                    rs.getTimestamp("data_doacao")
+                });
+            }
+
+            jTable1.setModel(model);
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -101,33 +96,28 @@ public DashboardView(Usuario usuarioLogado) {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jPanel12 = new javax.swing.JPanel();
-        jPanel11 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jPanel8 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jPanel12 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(204, 51, 0));
 
         jLabel3.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 204, 51));
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dashboard/dashboard_pressed.png"))); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dashboard/dashboard.png"))); // NOI18N
         jLabel3.setText("Dashboard");
         jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel4.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dashboard/list_.png"))); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 204, 51));
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dashboard/list_pressed.png"))); // NOI18N
         jLabel4.setText("Doações");
         jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
@@ -248,50 +238,9 @@ public DashboardView(Usuario usuarioLogado) {
             }
         });
         jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(20);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
-            jTable1.getColumnModel().getColumn(5).setResizable(false);
-            jTable1.getColumnModel().getColumn(6).setResizable(false);
-        }
 
         jLabel1.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
-        jLabel1.setText("Usuarios Cadastrados");
-
-        jPanel12.setBackground(new java.awt.Color(204, 255, 204));
-        jPanel12.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel12MouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 54, Short.MAX_VALUE)
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        jPanel11.setBackground(new java.awt.Color(255, 153, 153));
-
-        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 57, Short.MAX_VALUE)
-        );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jLabel1.setText("Doações Realizadas");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -303,26 +252,15 @@ public DashboardView(Usuario usuarioLogado) {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(23, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -351,15 +289,55 @@ public DashboardView(Usuario usuarioLogado) {
 
         jPanel8.setBackground(new java.awt.Color(204, 204, 204));
 
+        jPanel11.setBackground(new java.awt.Color(255, 153, 153));
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jPanel12.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel12MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1118, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(230, 230, 230))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 106, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -374,7 +352,7 @@ public DashboardView(Usuario usuarioLogado) {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 16, Short.MAX_VALUE))
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -398,42 +376,22 @@ public DashboardView(Usuario usuarioLogado) {
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         // TODO add your handling code here:
-            pixDonationView frame = new pixDonationView();
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int x = (screenSize.width - frame.getWidth()) / 2;
-            int y = (screenSize.height - frame.getHeight()) / 2;
-            frame.setLocation(x, y);
-            frame.setVisible(true);
-            this.dispose();
+        pixDonationView frame = new pixDonationView();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - frame.getWidth()) / 2;
+        int y = (screenSize.height - frame.getHeight()) / 2;
+        frame.setLocation(x, y);
+        frame.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-            int linha = jTable1.getSelectedRow();
+
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jPanel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel12MouseClicked
-        // TODO add your handling code here:
-            Usuario u = obterUsuarioSelecionado();
 
-                if (u != null) {
-                    editView tela = new editView(u);
-                    tela.setLocationRelativeTo(null);
-                    tela.setVisible(true);
-                    this.dispose();
-                }
-            }
-//GEN-LAST:event_jPanel12MouseClicked
-
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        // TODO add your handling code here:
-            DoacoesView frame = new DoacoesView();
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int x = (screenSize.width - frame.getWidth()) / 2;
-            int y = (screenSize.height - frame.getHeight()) / 2;
-            frame.setLocation(x, y);
-            frame.setVisible(true);
-            this.dispose();
-    }//GEN-LAST:event_jLabel4MouseClicked
+    }//GEN-LAST:event_jPanel12MouseClicked
 
     /**
      * @param args the command line arguments
@@ -457,7 +415,7 @@ public DashboardView(Usuario usuarioLogado) {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DashboardView().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new DoacoesView().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
