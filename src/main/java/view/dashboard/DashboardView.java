@@ -12,8 +12,12 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import util.SessaoUsuario;
 import view.crud.edit.editView;
+import view.doacoes.DoacoesPubView;
 import view.doacoes.DoacoesView;
 import view.login.LoginView;
+import view.metas.MetasAdminCriarView;
+import view.metas.MetasAdminView;
+import view.metas.MetasView;
 import view.pixDonation.pixDonationView;
 /**
  *
@@ -73,10 +77,8 @@ public DashboardView() {
     if (u.getIdPerfil() != 1) {
         jLabel12.setVisible(false);
         jLabel14.setVisible(false);
-        jLabel7.setVisible(false);
         jLabel9.setVisible(false);
         jLabel10.setVisible(false);
-        jLabel11.setVisible(false);
         jLabel8.setVisible(false);
     }
 }
@@ -92,11 +94,9 @@ public DashboardView(Usuario usuarioLogado) {
     if (u.getIdPerfil() != 1) {
         jLabel12.setVisible(false);
         jLabel14.setVisible(false);
-        jLabel7.setVisible(false);
         jLabel9.setVisible(false);
-        jLabel10.setVisible(false);
-        jLabel11.setVisible(false);
         jLabel8.setVisible(false);
+        jLabel10.setVisible(false);
     }
 }
     
@@ -115,12 +115,11 @@ public DashboardView(Usuario usuarioLogado) {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -190,31 +189,43 @@ public DashboardView(Usuario usuarioLogado) {
         jLabel6.setText("Doar");
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel7.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Usuarios");
-        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
         jLabel8.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Admin");
 
         jLabel9.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("Metas");
+        jLabel9.setText("Doacoes");
         jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel9MouseClicked(evt);
+            }
+        });
+
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/200.png"))); // NOI18N
 
         jLabel10.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Beneficiarios");
+        jLabel10.setText("Metas");
         jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel10MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel10MouseEntered(evt);
+            }
+        });
 
-        jLabel11.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Relatorios");
-        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/200.png"))); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Poppins", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Metas");
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -226,17 +237,19 @@ public DashboardView(Usuario usuarioLogado) {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel7)
-                        .addComponent(jLabel9)
-                        .addComponent(jLabel10)
-                        .addComponent(jLabel11))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10))
+                        .addGap(31, 31, 31))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel3)
                         .addComponent(jLabel4)
-                        .addComponent(jLabel5)
+                        .addComponent(jLabel8)
                         .addComponent(jLabel6)
-                        .addComponent(jLabel8)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel5))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -252,17 +265,15 @@ public DashboardView(Usuario usuarioLogado) {
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
-                .addGap(36, 36, 36)
-                .addComponent(jLabel8)
-                .addGap(28, 28, 28)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel7)
+                .addGap(27, 27, 27)
+                .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel11)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -342,11 +353,12 @@ public DashboardView(Usuario usuarioLogado) {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel14))
+                .addContainerGap(22, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel14)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel12)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -635,7 +647,7 @@ public DashboardView(Usuario usuarioLogado) {
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         // TODO add your handling code here:
-            DoacoesView frame = new DoacoesView();
+            DoacoesPubView frame = new DoacoesPubView();
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int x = (screenSize.width - frame.getWidth()) / 2;
             int y = (screenSize.height - frame.getHeight()) / 2;
@@ -686,6 +698,40 @@ public DashboardView(Usuario usuarioLogado) {
         this.dispose();
     }//GEN-LAST:event_jLabel15MouseClicked
 
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+            DoacoesView frame = new DoacoesView();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - frame.getWidth()) / 2;
+            int y = (screenSize.height - frame.getHeight()) / 2;
+            frame.setLocation(x, y);
+            frame.setVisible(true);
+            this.dispose();
+    }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+            MetasAdminView frame = new MetasAdminView();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - frame.getWidth()) / 2;
+            int y = (screenSize.height - frame.getHeight()) / 2;
+            frame.setLocation(x, y);
+            frame.setVisible(true);
+            this.dispose();
+    }//GEN-LAST:event_jLabel10MouseClicked
+
+    private void jLabel10MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel10MouseEntered
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+            MetasView frame = new MetasView();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - frame.getWidth()) / 2;
+            int y = (screenSize.height - frame.getHeight()) / 2;
+            frame.setLocation(x, y);
+            frame.setVisible(true);
+            this.dispose();
+    }//GEN-LAST:event_jLabel7MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -714,7 +760,6 @@ public DashboardView(Usuario usuarioLogado) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;

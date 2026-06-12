@@ -29,27 +29,6 @@ public class UsuarioDAO {
         }
     }
 
-    public void atualizar(Usuario usuario) {
-        String sql = "UPDATE usuario SET usuario=?, nome=?, email=?, senha=?, telefone=?, id_perfil=?, ativo=? WHERE id_usuario=?";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, usuario.getUsuario());
-            stmt.setString(2, usuario.getNome());
-            stmt.setString(3, usuario.getEmail());
-            stmt.setString(4, usuario.getSenha());
-            stmt.setString(5, usuario.getTelefone());
-            stmt.setInt(6, usuario.getIdPerfil());
-            stmt.setInt(7, usuario.getAtivo());
-            stmt.setInt(8, usuario.getIdUsuario());
-
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void excluir(int idUsuario) {
         String sql = "DELETE FROM usuario WHERE id_usuario=?";
 
@@ -94,6 +73,29 @@ public class UsuarioDAO {
         return null;
     }
 
+
+    public void atualizar(Usuario usuario) {
+        String sql = "UPDATE usuario SET usuario=?, nome=?, email=?, senha=?, telefone=?, id_perfil=?, ativo=? WHERE id_usuario=?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario.getUsuario());
+            stmt.setString(2, usuario.getNome());
+            stmt.setString(3, usuario.getEmail());
+            stmt.setString(4, usuario.getSenha());
+            stmt.setString(5, usuario.getTelefone());
+            stmt.setInt(6, usuario.getIdPerfil());
+            stmt.setInt(7, usuario.getAtivo());
+            stmt.setInt(8, usuario.getIdUsuario());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
     public List<Usuario> listarTodos() {
         List<Usuario> lista = new ArrayList<>();
         String sql = "SELECT * FROM usuario ORDER BY id_usuario";

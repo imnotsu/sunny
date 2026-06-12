@@ -4,12 +4,16 @@
  */
 package view.doacoes;
 
+import dao.CampanhaDAO;
+import dao.DoacaoPixDAO;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import model.Usuario;
 import view.crud.edit.editView;
 import view.dashboard.DashboardView;
 import view.login.LoginView;
+import view.metas.MetasAdminView;
+import view.metas.MetasView;
 import view.pixDonation.pixDonationView;
 
 /**
@@ -28,50 +32,34 @@ public class DoacoesView extends javax.swing.JFrame {
         initComponents();
         carregarDoacoes();
     }
+
+    private void limparCamposDoacao() {
+        IdDoadorTextField.setText("");
+        NomeDoadorTextField.setText("");
+        emailDoador.setText("");
+        ObservacoesTextFiel.setText("");
+        QuantidadeTextField.setText("");
+        TipoDoacaoComboBox.setSelectedIndex(0);
+        CampanhaComboBox.setSelectedIndex(0);
+        GeneroDestinoCombobox.setSelectedIndex(0);
+        TamanhoRoupaComboBox.setSelectedIndex(0);
+        TamanhoCalcadoComboBox.setSelectedIndex(0);
+    }
     
     private void carregarDoacoes() {
-        String sql = """
-            SELECT 
-                d.id_doacao,
-                d.nome_doador,
-                d.email_doador,
-                td.nome AS tipo_doacao,
-                sd.nome AS status_doacao,
-                dd.valor,
-                d.data_doacao
-            FROM doacao d
-            INNER JOIN tipo_doacao td ON d.id_tipo_doacao = td.id_tipo_doacao
-            INNER JOIN status_doacao sd ON d.id_status_doacao = sd.id_status_doacao
-            LEFT JOIN doacao_dinheiro dd ON d.id_doacao = dd.id_doacao
-            ORDER BY d.data_doacao DESC
-        """;
+        DoacaoPixDAO dao = new DoacaoPixDAO();
+        java.util.List<Object[]> lista = dao.listarDoacoes();
 
-        try (java.sql.Connection conn = util.DatabaseConnection.getConnection();
-             java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
-             java.sql.ResultSet rs = stmt.executeQuery()) {
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel();
+        model.setColumnIdentifiers(new Object[]{
+            "ID", "Nome", "Email", "Tipo de Doação", "Status", "Valor", "Data"
+        });
 
-            javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel();
-            model.setColumnIdentifiers(new Object[]{
-                "ID", "Nome", "Email", "Tipo de Doação", "Status", "Valor", "Data"
-            });
-
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getLong("id_doacao"),
-                    rs.getString("nome_doador"),
-                    rs.getString("email_doador"),
-                    rs.getString("tipo_doacao"),
-                    rs.getString("status_doacao"),
-                    rs.getBigDecimal("valor"),
-                    rs.getTimestamp("data_doacao")
-                });
-            }
-
-            jTable1.setModel(model);
-
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+        for (Object[] linha : lista) {
+            model.addRow(linha);
         }
+
+        jTable1.setModel(model);
     }
 
     /**
@@ -88,22 +76,43 @@ public class DoacoesView extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        ExcluirBtn = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jPanel8 = new javax.swing.JPanel();
-        jPanel11 = new javax.swing.JPanel();
-        jPanel12 = new javax.swing.JPanel();
+        IdCampanhaTextField = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        IdDoadorTxt = new javax.swing.JLabel();
+        IdDoadorTextField = new javax.swing.JTextField();
+        NomeDoadorTextField = new javax.swing.JTextField();
+        NomeDoadorTxt = new javax.swing.JLabel();
+        EmailDoadorTxt = new javax.swing.JLabel();
+        emailDoador = new javax.swing.JTextField();
+        TipoDoacaoComboBox = new javax.swing.JComboBox<>();
+        CampanhaComboBox = new javax.swing.JComboBox<>();
+        TipoDoacaoTxt = new javax.swing.JLabel();
+        CampanhaTxt = new javax.swing.JLabel();
+        ObservacoesTxt = new javax.swing.JLabel();
+        ObservacoesTextFiel = new javax.swing.JTextField();
+        QuantidadeTxt = new javax.swing.JLabel();
+        QuantidadeTextField = new javax.swing.JTextField();
+        TamanhoCalcadoComboBox = new javax.swing.JComboBox<>();
+        TamanhoRoupaComboBox = new javax.swing.JComboBox<>();
+        TamanhoCalcadoTxt = new javax.swing.JLabel();
+        TamanhoRoupaTxt = new javax.swing.JLabel();
+        GeneroDestinoTxt = new javax.swing.JLabel();
+        GeneroDestinoCombobox = new javax.swing.JComboBox<>();
+        jButton2 = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,8 +130,8 @@ public class DoacoesView extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 204, 51));
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dashboard/list_pressed.png"))); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dashboard/list_.png"))); // NOI18N
         jLabel4.setText("Doações");
         jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
@@ -143,11 +152,6 @@ public class DoacoesView extends javax.swing.JFrame {
         jLabel6.setText("Doar");
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel7.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Usuarios");
-        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
         jLabel8.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Admin");
@@ -156,18 +160,27 @@ public class DoacoesView extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Metas");
         jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        jLabel10.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Beneficiarios");
-        jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        jLabel11.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Relatorios");
-        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel9MouseClicked(evt);
+            }
+        });
 
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/200.png"))); // NOI18N
+
+        jLabel10.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 153, 51));
+        jLabel10.setText("Doacoes");
+        jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        jLabel7.setFont(new java.awt.Font("Poppins", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Metas");
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -180,16 +193,18 @@ public class DoacoesView extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel7)
-                        .addComponent(jLabel9)
-                        .addComponent(jLabel10)
-                        .addComponent(jLabel11))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel3)
                         .addComponent(jLabel4)
                         .addComponent(jLabel5)
                         .addComponent(jLabel6)
-                        .addComponent(jLabel8)))
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel9)
+                                .addComponent(jLabel10)))
+                        .addGap(31, 31, 31)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -205,16 +220,14 @@ public class DoacoesView extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
-                .addGap(36, 36, 36)
-                .addComponent(jLabel8)
-                .addGap(28, 28, 28)
+                .addGap(2, 2, 2)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8)
+                .addGap(28, 28, 28)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel11)
+                .addComponent(jLabel9)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -249,103 +262,121 @@ public class DoacoesView extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
         jLabel1.setText("Doações Realizadas");
 
+        ExcluirBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/formIcons/delete.png"))); // NOI18N
+        ExcluirBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ExcluirBtnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ExcluirBtn)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addGap(16, 16, 16)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(ExcluirBtn))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setFont(new java.awt.Font("Poppins", 1, 18)); // NOI18N
-        jLabel2.setText("Ola, fulanodetal");
+        IdCampanhaTextField.setText("Buscar por Id doacao");
+
+        jButton1.setText("Buscar");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
+                .addGap(169, 169, 169)
+                .addComponent(IdCampanhaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jLabel2)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(IdCampanhaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
-        jPanel8.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel12.setFont(new java.awt.Font("Poppins", 1, 18)); // NOI18N
+        jLabel12.setText("Criar Doação");
 
-        jPanel11.setBackground(new java.awt.Color(255, 153, 153));
+        IdDoadorTxt.setText("Id Doador");
 
-        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+        NomeDoadorTxt.setText("Nome Doador");
 
-        jPanel12.setBackground(new java.awt.Color(204, 255, 204));
-        jPanel12.addMouseListener(new java.awt.event.MouseAdapter() {
+        EmailDoadorTxt.setText("Email Doador");
+
+        TipoDoacaoComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nao se aplica", "ALIMENTO", "ROUPA", "CALCADO", "BRINQUEDO", "LIVRO", "ELETRODOMESTICO", "SAUDE", "OUTROS" }));
+
+        CampanhaComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nao se aplica" }));
+
+        TipoDoacaoTxt.setText("Tipo Doacao");
+
+        CampanhaTxt.setText("Campanha");
+
+        ObservacoesTxt.setText("Observacoes");
+
+        ObservacoesTextFiel.setText("Observacao");
+
+        QuantidadeTxt.setText("Quantidade");
+
+        QuantidadeTextField.setText("jTextField2");
+        QuantidadeTextField.addActionListener(this::QuantidadeTextFieldActionPerformed);
+
+        TamanhoCalcadoComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nao se aplica", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48" }));
+        TamanhoCalcadoComboBox.addActionListener(this::TamanhoCalcadoComboBoxActionPerformed);
+
+        TamanhoRoupaComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nao se aplica", "P", "M", "G", "GG", "XG", "XXG", "XXXG", "XXXXG", "XXXXXG" }));
+
+        TamanhoCalcadoTxt.setText("Tamanho Calcado");
+
+        TamanhoRoupaTxt.setText("Tamanho Roupa");
+
+        GeneroDestinoTxt.setText("Genero Destino");
+
+        GeneroDestinoCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nao se aplica", "Unissex", "Femino", "Masculino", " ", " " }));
+
+        jButton2.setBackground(new java.awt.Color(204, 255, 102));
+        jButton2.setText("Salvar");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel12MouseClicked(evt);
+                jButton2MouseClicked(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+        jLabel14.setText("Proximos campos, deixar nulo");
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(230, 230, 230))
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jLabel15.setText("caso nao se aplique");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -358,9 +389,51 @@ public class DoacoesView extends javax.swing.JFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 16, Short.MAX_VALUE))
-                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(TamanhoCalcadoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(60, 60, 60)
+                                .addComponent(TamanhoRoupaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ObservacoesTxt)
+                            .addComponent(ObservacoesTextFiel, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(GeneroDestinoTxt)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(GeneroDestinoCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton2))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(emailDoador, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(IdDoadorTxt, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(IdDoadorTextField, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addComponent(EmailDoadorTxt))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(NomeDoadorTxt)
+                                        .addComponent(NomeDoadorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(TipoDoacaoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(TipoDoacaoTxt))
+                                            .addGap(18, 18, 18)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(CampanhaTxt)
+                                                .addComponent(CampanhaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(TamanhoCalcadoTxt)
+                                    .addComponent(QuantidadeTxt)
+                                    .addComponent(QuantidadeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(36, 36, 36)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel15)
+                                    .addComponent(jLabel14)
+                                    .addComponent(TamanhoRoupaTxt))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -369,11 +442,58 @@ public class DoacoesView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(NomeDoadorTxt)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(NomeDoadorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addGap(18, 18, 18)
+                                .addComponent(IdDoadorTxt)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(IdDoadorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(EmailDoadorTxt)
+                            .addComponent(TipoDoacaoTxt)
+                            .addComponent(CampanhaTxt))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(emailDoador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TipoDoacaoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CampanhaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addComponent(ObservacoesTxt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ObservacoesTextFiel, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(QuantidadeTxt)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(QuantidadeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(TamanhoCalcadoTxt)
+                                    .addComponent(TamanhoRoupaTxt))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(TamanhoCalcadoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TamanhoRoupaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(GeneroDestinoTxt)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(GeneroDestinoCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton2)))
+                            .addComponent(jLabel15))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -396,10 +516,6 @@ public class DoacoesView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jTable1MouseClicked
 
-    private void jPanel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel12MouseClicked
-
-    }//GEN-LAST:event_jPanel12MouseClicked
-
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
             DashboardView frame = new DashboardView();
@@ -410,6 +526,131 @@ public class DoacoesView extends javax.swing.JFrame {
             frame.setVisible(true);
             this.dispose();
     }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void ExcluirBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExcluirBtnMouseClicked
+        try {
+            int idCampanha = Integer.parseInt(IdCampanhaTextField.getText().trim());
+
+            int confirm = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                "Deseja excluir esta campanha?",
+                "Confirmar exclusão",
+                javax.swing.JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+                CampanhaDAO dao = new CampanhaDAO();
+                boolean ok = dao.excluir(idCampanha);
+
+                if (ok) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Campanha excluída com sucesso.");
+                    carregarDoacoes();
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Erro ao excluir campanha.");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao excluir.");
+        }
+    }//GEN-LAST:event_ExcluirBtnMouseClicked
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+
+    try {
+        long idDoacao = Long.parseLong(IdCampanhaTextField.getText().trim());
+
+        DoacaoPixDAO dao = new DoacaoPixDAO();
+        java.util.List<Object[]> lista = dao.buscarPorId(idDoacao);
+
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel();
+        model.setColumnIdentifiers(new Object[]{
+            "ID", "Nome", "Email", "Tipo de Doação", "Status", "Valor", "Data"
+        });
+
+        for (Object[] linha : lista) {
+            model.addRow(linha);
+        }
+
+        jTable1.setModel(model);
+
+    } catch (NumberFormatException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Digite um ID válido.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        javax.swing.JOptionPane.showMessageDialog(this, "Erro ao buscar doação.");
+    }
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void QuantidadeTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuantidadeTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_QuantidadeTextFieldActionPerformed
+
+    private void TamanhoCalcadoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TamanhoCalcadoComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TamanhoCalcadoComboBoxActionPerformed
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        try {
+            int idDoador = Integer.parseInt(IdDoadorTextField.getText().trim());
+            String nomeDoador = NomeDoadorTextField.getText().trim();
+            String email = emailDoador.getText().trim();
+            String observacao = ObservacoesTextFiel.getText().trim();
+
+            String tipoSelecionado = String.valueOf(TipoDoacaoComboBox.getSelectedItem());
+            String campanhaSelecionada = String.valueOf(CampanhaComboBox.getSelectedItem());
+
+            int idTipoDoacao = TipoDoacaoComboBox.getSelectedIndex() + 1;
+            Integer idCampanha = null;
+
+            if (!"Nao se aplica".equalsIgnoreCase(campanhaSelecionada)) {
+                idCampanha = Integer.parseInt(campanhaSelecionada);
+            }
+
+            DoacaoPixDAO dao = new DoacaoPixDAO();
+            long idDoacao = dao.inserirDoacaoPendente(
+                idDoador,
+                nomeDoador,
+                email,
+                idTipoDoacao,
+                idCampanha,
+                observacao
+            );
+
+            if (idDoacao > 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Doação criada com sucesso.");
+                carregarDoacoes();
+                limparCamposDoacao();
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Erro ao criar doação.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(this, "Erro ao salvar doação.");
+        }
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        MetasView frame = new MetasView();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - frame.getWidth()) / 2;
+        int y = (screenSize.height - frame.getHeight()) / 2;
+        frame.setLocation(x, y);
+        frame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        MetasAdminView frame = new MetasAdminView();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - frame.getWidth()) / 2;
+        int y = (screenSize.height - frame.getHeight()) / 2;
+        frame.setLocation(x, y);
+        frame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel9MouseClicked
 
     /**
      * @param args the command line arguments
@@ -437,11 +678,36 @@ public class DoacoesView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> CampanhaComboBox;
+    private javax.swing.JLabel CampanhaTxt;
+    private javax.swing.JLabel EmailDoadorTxt;
+    private javax.swing.JLabel ExcluirBtn;
+    private javax.swing.JComboBox<String> GeneroDestinoCombobox;
+    private javax.swing.JLabel GeneroDestinoTxt;
+    private javax.swing.JTextField IdCampanhaTextField;
+    private javax.swing.JTextField IdDoadorTextField;
+    private javax.swing.JLabel IdDoadorTxt;
+    private javax.swing.JTextField NomeDoadorTextField;
+    private javax.swing.JLabel NomeDoadorTxt;
+    private javax.swing.JTextField ObservacoesTextFiel;
+    private javax.swing.JLabel ObservacoesTxt;
+    private javax.swing.JTextField QuantidadeTextField;
+    private javax.swing.JLabel QuantidadeTxt;
+    private javax.swing.JComboBox<String> TamanhoCalcadoComboBox;
+    private javax.swing.JLabel TamanhoCalcadoTxt;
+    private javax.swing.JComboBox<String> TamanhoRoupaComboBox;
+    private javax.swing.JLabel TamanhoRoupaTxt;
+    private javax.swing.JComboBox<String> TipoDoacaoComboBox;
+    private javax.swing.JLabel TipoDoacaoTxt;
+    private javax.swing.JTextField emailDoador;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -450,13 +716,9 @@ public class DoacoesView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

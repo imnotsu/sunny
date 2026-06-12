@@ -14,7 +14,10 @@ import model.Usuario;
 import util.PixGenerator;
 import util.SessaoUsuario;
 import view.dashboard.DashboardView;
+import view.doacoes.DoacoesPubView;
 import view.doacoes.DoacoesView;
+import view.doacoes.DoarView;
+import view.metas.MetasView;
 
 /**
  *
@@ -83,17 +86,13 @@ public class pixDonationView extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel20 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -122,16 +121,6 @@ public class pixDonationView extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(204, 51, 0));
 
-        jLabel20.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel20.setText("Usuarios");
-        jLabel20.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        jLabel22.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel22.setText("Metas");
-        jLabel22.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
         jLabel17.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 204, 51));
         jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dashboard/pix_pressed.png"))); // NOI18N
@@ -149,15 +138,6 @@ public class pixDonationView extends javax.swing.JFrame {
             }
         });
 
-        jLabel23.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel23.setText("Beneficiarios");
-        jLabel23.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        jLabel21.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel21.setText("Admin");
-
         jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/200.png"))); // NOI18N
 
         jLabel19.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
@@ -165,6 +145,11 @@ public class pixDonationView extends javax.swing.JFrame {
         jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dashboard/donation.png"))); // NOI18N
         jLabel19.setText("Doar");
         jLabel19.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel19.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel19MouseClicked(evt);
+            }
+        });
 
         jLabel15.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
@@ -176,11 +161,6 @@ public class pixDonationView extends javax.swing.JFrame {
                 jLabel15MouseClicked(evt);
             }
         });
-
-        jLabel14.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
-        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setText("Relatorios");
-        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jPanel4.setBackground(new java.awt.Color(255, 204, 51));
 
@@ -195,6 +175,15 @@ public class pixDonationView extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        jLabel14.setFont(new java.awt.Font("Poppins", 1, 18)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("Metas");
+        jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel14MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -204,18 +193,13 @@ public class pixDonationView extends javax.swing.JFrame {
                     .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel20)
-                                .addComponent(jLabel22)
-                                .addComponent(jLabel23)
-                                .addComponent(jLabel14))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel15)
-                                .addComponent(jLabel16)
-                                .addComponent(jLabel17)
-                                .addComponent(jLabel19)
-                                .addComponent(jLabel21)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel19)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel14)
+                                .addComponent(jLabel17)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -232,15 +216,7 @@ public class pixDonationView extends javax.swing.JFrame {
                 .addComponent(jLabel17)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel19)
-                .addGap(36, 36, 36)
-                .addComponent(jLabel21)
-                .addGap(28, 28, 28)
-                .addComponent(jLabel20)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel22)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel23)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel14)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -430,10 +406,11 @@ public class pixDonationView extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel24)
-                    .addComponent(jLabel25))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel25)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -579,7 +556,7 @@ public class pixDonationView extends javax.swing.JFrame {
 
     private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked
         // TODO add your handling code here:
-            DoacoesView frame = new DoacoesView();
+            DoacoesPubView frame = new DoacoesPubView();
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int x = (screenSize.width - frame.getWidth()) / 2;
             int y = (screenSize.height - frame.getHeight()) / 2;
@@ -587,6 +564,26 @@ public class pixDonationView extends javax.swing.JFrame {
             frame.setVisible(true);
             this.dispose();
     }//GEN-LAST:event_jLabel16MouseClicked
+
+    private void jLabel19MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel19MouseClicked
+            DoarView frame = new DoarView();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - frame.getWidth()) / 2;
+            int y = (screenSize.height - frame.getHeight()) / 2;
+            frame.setLocation(x, y);
+            frame.setVisible(true);
+            this.dispose();
+    }//GEN-LAST:event_jLabel19MouseClicked
+
+    private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
+        MetasView frame = new MetasView();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - frame.getWidth()) / 2;
+        int y = (screenSize.height - frame.getHeight()) / 2;
+        frame.setLocation(x, y);
+        frame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel14MouseClicked
 
     /**
      * @param args the command line arguments
@@ -628,10 +625,6 @@ public class pixDonationView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
