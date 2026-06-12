@@ -8,6 +8,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import model.Usuario;
 import view.crud.edit.editView;
+import view.dashboard.DashboardView;
+import view.login.LoginView;
 import view.pixDonation.pixDonationView;
 
 /**
@@ -112,6 +114,11 @@ public class DoacoesView extends javax.swing.JFrame {
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dashboard/dashboard.png"))); // NOI18N
         jLabel3.setText("Dashboard");
         jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 204, 51));
@@ -392,6 +399,17 @@ public class DoacoesView extends javax.swing.JFrame {
     private void jPanel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel12MouseClicked
 
     }//GEN-LAST:event_jPanel12MouseClicked
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        // TODO add your handling code here:
+            DashboardView frame = new DashboardView();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - frame.getWidth()) / 2;
+            int y = (screenSize.height - frame.getHeight()) / 2;
+            frame.setLocation(x, y);
+            frame.setVisible(true);
+            this.dispose();
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     /**
      * @param args the command line arguments

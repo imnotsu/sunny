@@ -1,7 +1,10 @@
 package view.crud.edit;
 
 import controller.UsuarioController;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import model.Usuario;
+import view.dashboard.DashboardView;
 
 /**
  *
@@ -150,6 +153,11 @@ private void preencherCampos() {
         jLabel1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 0, 51));
         jLabel1.setText("Cancelar");
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
 
         txtId.setText("jLabel3");
 
@@ -260,6 +268,17 @@ private void preencherCampos() {
     this.dispose();
 }
 //GEN-LAST:event_jButton1MouseClicked
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        // TODO add your handling code here:
+            DashboardView frame = new DashboardView();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - frame.getWidth()) / 2;
+            int y = (screenSize.height - frame.getHeight()) / 2;
+            frame.setLocation(x, y);
+            frame.setVisible(true);
+            this.dispose();
+    }//GEN-LAST:event_jLabel1MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -8,6 +8,8 @@ import controller.UsuarioController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import model.Usuario;
+import util.SessaoUsuario;
+import view.dashboard.DashboardView;
 
 /**
  *
@@ -217,12 +219,27 @@ public class RegisterView extends javax.swing.JFrame {
         usuario.setTelefone(txtTelefone.getText());
         usuario.setIdPerfil(2); // exemplo: COMUM
         usuario.setAtivo(1);
+        
 
+                
         UsuarioController controller = new UsuarioController();
         boolean salvo = controller.salvarUsuario(usuario);
 
         if (salvo) {
             javax.swing.JOptionPane.showMessageDialog(this, "Usuário cadastrado com sucesso!");
+            String usuarioLogin = txtUsuario.getText();
+            String senhaLogin = new String(txtSenha.getPassword());
+
+            Usuario user = controller.login(usuarioLogin, senhaLogin);
+            SessaoUsuario.setUsuarioLogado(user);
+            DashboardView frame = new DashboardView(user);
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - frame.getWidth()) / 2;
+            int y = (screenSize.height - frame.getHeight()) / 2;
+            frame.setLocation(x, y);
+            frame.setVisible(true);
+            this.dispose();
+            
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Preencha os campos corretamente.");
         }

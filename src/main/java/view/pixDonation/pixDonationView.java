@@ -14,6 +14,7 @@ import model.Usuario;
 import util.PixGenerator;
 import util.SessaoUsuario;
 import view.dashboard.DashboardView;
+import view.doacoes.DoacoesView;
 
 /**
  *
@@ -142,6 +143,11 @@ public class pixDonationView extends javax.swing.JFrame {
         jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dashboard/list_.png"))); // NOI18N
         jLabel16.setText("Doações");
         jLabel16.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel16.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel16MouseClicked(evt);
+            }
+        });
 
         jLabel23.setFont(new java.awt.Font("Poppins", 1, 14)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(255, 255, 255));
@@ -570,6 +576,17 @@ public class pixDonationView extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Erro ao verificar pagamento.");
         }
     }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked
+        // TODO add your handling code here:
+            DoacoesView frame = new DoacoesView();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - frame.getWidth()) / 2;
+            int y = (screenSize.height - frame.getHeight()) / 2;
+            frame.setLocation(x, y);
+            frame.setVisible(true);
+            this.dispose();
+    }//GEN-LAST:event_jLabel16MouseClicked
 
     /**
      * @param args the command line arguments
